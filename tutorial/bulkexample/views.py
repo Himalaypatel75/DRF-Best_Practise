@@ -55,6 +55,22 @@ class ProductView(generics.ListCreateAPIView):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+class ProductUpdateView(generics.UpdateAPIView):  
+    serializer_class = ProductSerializer 
+    queryset = Product.objects.all()  
+    lookup_field = 'id'
+
+    def update(self, request, *args, **kwargs):
+
+        product_object = []
+        for item in request.data:
+            product_item = Product.objects.get(id=item.get('id'))
+            product_item.title = item.get('title')
+            product_object.append(product_item)
+
+        value_return = models.Product.objects.bulk_update(product_object,['title'])
+
+        return Response(value_return, status=status.HTTP_201_CREATED)
 
 class ProductGetView(ListAPIView):
     serializer_class = ProductViewSerializer 
