@@ -27,6 +27,17 @@ from django.core.mail import send_mail
 #             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
 
 
+def update_wich_have_id(data_with_id):
+
+    product_object = []
+    for item in data_with_id:
+        product_item = Product.objects.get(id=item.get('id'))
+        product_item.title = item.get('title')
+        product_object.append(product_item)
+
+    value_return = models.Product.objects.bulk_update(product_object,['title'])
+
+    return value_return
 
 
 class ProductView(generics.ListCreateAPIView):  
@@ -40,15 +51,31 @@ class ProductView(generics.ListCreateAPIView):
     
     #     return super(ProductView, self).get_serializer(*args, **kwargs) 
 
+
+
     def create(self, request, *args, **kwargs):
 
-        for data in request.data:
-            print(data)
+        data_with_id = []
+        final_data = request.data
+
+        # numbers = request.data.copy()
+        # print(final_data)
+        for i,data in enumerate(final_data,  start=0):
+            # print(i)
+            # print(data)
             if not (data.get('id') is None):
-                print(f"this is id>>{data}<<")
+                data_with_id.append(data)
+                final_data.pop(i)
+                # print(f"this is id>>{data}<<")
             else:
                 print(f"this in non id>>{data}<<")
-        serializer = self.get_serializer(data=request.data, many=True)
+        # print(final_data)
+        # print(data_with_id)
+        serializer = self.get_serializer(data=final_data, many=True)
+
+        update_value = update_wich_have_id(data_with_id)
+
+        print(f"this is result after updating>>{update_value}<<")
         # print(f"this is requestdata>>>{request.data}<<<")
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
