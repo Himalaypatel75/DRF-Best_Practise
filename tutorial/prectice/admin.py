@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Project, Task
+
+class PrecticeAdmin(admin.ModelAdmin):
+    pass
+admin.site.register(Project, PrecticeAdmin)
+admin.site.register(Task, PrecticeAdmin)

@@ -27,6 +27,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/bulk/', include("bulkexample.urls")),
     path('api/thumb/', include("thumbnail.urls")),
-    # path('api/test/', include("prectice.urls")),
+    path('api/test/', include("prectice.urls")),
     url(r'^$', schema_view)
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

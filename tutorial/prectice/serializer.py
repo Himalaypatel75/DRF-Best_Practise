@@ -35,3 +35,9 @@ class TaskSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "last_modified")
         list_serializer_class = BulkCreateListSerializer
 
+
+class ProjectSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = '__all__'
